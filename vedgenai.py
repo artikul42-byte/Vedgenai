@@ -47,5 +47,17 @@ if st.button("Submit"):
     if not user_input:
         st.warning("Please type something!")
     else:
-        # Show spinner while AI thinks
-        with st.spinner("VedgenAI is researching..."):
+        if user_question:
+    with st.spinner("VedgenAI is researching..."):
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4.1-mini",
+                messages=[
+                    {"role": "system", "content": "You are VedgenAI, a helpful AI assistant."},
+                    {"role": "user", "content": user_question}
+                ]
+            )
+            answer = response.choices[0].message.content
+            st.success(answer)
+        except Exception as e:
+            st.error(f"Oops! Something went wrong: {e}")
