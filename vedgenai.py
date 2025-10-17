@@ -1,53 +1,35 @@
 import streamlit as st
-import openai
-from time import sleep
+from openai import OpenAI
 
-# --- OpenAI API Key ---
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+# Initialize OpenAI client
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# --- Page Config ---
-st.set_page_config(page_title="VedgenAI", layout="wide")
-
-# --- Header ---
-st.title("VedgenAI 🚀")
-st.subheader("Innovative AI Features Showcase")
-
-# --- Innovative Features Section ---
-st.markdown("### Our Innovative Features")
-
-# Columns for feature cards
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.markdown("**Hyper-Realistic Synthetic Humans**")
-    st.write("Generate fully customizable, photorealistic 3D humans with diverse ethnicities, body types, ages, and attire. Includes micro-expressions and natural movements for high-fidelity simulations.")
-
-with col2:
-    st.markdown("**Context-Aware Scenario Generation**")
-    st.write("Place synthetic humans in complex, real-world environments—like crowded streets, offices, or industrial settings. Dynamic lighting, weather, and perspective adjustments for realism.")
-
-with col3:
-    st.markdown("**Intelligent Automation & Insights**")
-    st.write("AI generates data-driven insights, automates repetitive tasks, and adapts to user preferences for smarter decision-making.")
-
-# --- Research Feature Section ---
-st.markdown("### Research Feature")
-st.write(
-    "VedgenAI can perform advanced research tasks, summarizing large volumes of information, extracting key insights, "
-    "and generating concise reports from data or documents provided by the user. Perfect for learning, business analysis, or academic work."
+# Page configuration
+st.set_page_config(
+    page_title="VedgenAI",
+    page_icon="🤖",
+    layout="wide"
 )
 
-st.markdown("---")
+# App header
+st.title("VedgenAI")
+st.write("Your AI assistant exploring everything!")
 
-# --- User Input Section ---
-st.subheader("Ask VedgenAI Anything")
-user_input = st.text_input("Type your question here:")
+# Innovative Features section
+st.subheader("Innovative Features of VedgenAI")
+st.markdown("""
+1. **Hyper-Realistic Synthetic Humans**: Generate fully customizable, photorealistic 3D humans with diverse ethnicities, body types, ages, and attire.  
+2. **Context-Aware Scenario Generation**: Place synthetic humans in complex, real-world environments—dynamic lighting, weather, and perspective adjustments included.  
+3. **Intelligent Conversational AI**: Engage with AI that understands context, emotions, and user intent.  
+4. **Advanced Knowledge Integration**: Access real-time knowledge from multiple domains for precise answers.  
+""")
 
-if st.button("Submit"):
-    if not user_input:
-        st.warning("Please type something!")
-    else:
-        if user_question:
+# User input section
+st.subheader("Ask VedgenAI anything!")
+user_question = st.text_input("Type your question here:")
+
+# AI response
+if user_question:
     with st.spinner("VedgenAI is researching..."):
         try:
             response = client.chat.completions.create(
