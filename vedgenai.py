@@ -48,4 +48,4 @@ if st.button("Submit"):
         st.warning("Please type something!")
     else:
         # Show spinner while AI thinks
-        with st.spinner("VedgenAI is researching
+        with st.spinner("VedgenAI is researching..."):
