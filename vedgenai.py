@@ -1,4 +1,5 @@
 import streamlit as st
+from openai import OpenAI
 
 # 🎯 App Title
 st.title("🤖 VedgenAI - The Future of Synthetic Intelligence")
@@ -50,5 +51,15 @@ st.header("💬 Ask VedgenAI Anything")
 user_input = st.text_input("Type your question here:")
 
 if user_input:
-    response = f"VedgenAI says: '{user_input}' sounds fascinating! Our AI systems are continuously evolving."
-    st.success(response)
+    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+    with st.spinner("VedgenAI is thinking..."):
+        chat_response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are VedgenAI, a futuristic AI that answers questions clearly and intelligently."},
+                {"role": "user", "content": user_input}
+            ]
+        )
+
+    st.success("VedgenAI says: " + chat_response.choices[0].message.content)
