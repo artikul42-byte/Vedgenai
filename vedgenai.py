@@ -1,22 +1,9 @@
-import subprocess
-import sys
-
-# Install required packages at runtime
-try:
-    import openai
-except ModuleNotFoundError:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "openai"])
-    import openai
-
-try:
-    import streamlit as st
-except ModuleNotFoundError:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "streamlit"])
-    import streamlit as st
-
+import streamlit as st
+import openai
 import os
 
-# Set your OpenAI API key from Streamlit secrets or environment
+# ----------------- Set OpenAI API key -----------------
+# Make sure you set OPENAI_API_KEY in Streamlit secrets
 openai.api_key = os.environ.get("OPENAI_API_KEY", "")
 
 # ----------------- Streamlit App -----------------
@@ -47,7 +34,6 @@ features = [
     }
 ]
 
-# Display features in two columns
 cols = st.columns(2)
 for i, feature in enumerate(features):
     with cols[i % 2]:
