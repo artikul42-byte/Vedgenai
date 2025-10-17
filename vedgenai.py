@@ -1,65 +1,62 @@
 import streamlit as st
 import openai
-import os
+from time import sleep
 
-# ----------------- Set OpenAI API key -----------------
-# Make sure you set OPENAI_API_KEY in Streamlit secrets
-openai.api_key = os.environ.get("OPENAI_API_KEY", "")
+# --- OpenAI API Key ---
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
-# ----------------- Streamlit App -----------------
+# --- Page Config ---
 st.set_page_config(page_title="VedgenAI", layout="wide")
 
-st.title("VedgenAI 🤖")
-st.write("Welcome to VedgenAI! Explore our innovative AI features below, then try asking a question.")
+# --- Header ---
+st.title("VedgenAI 🚀")
+st.subheader("Innovative AI Features Showcase")
 
-# ----------------- Innovative Features Section -----------------
-st.subheader("✨ Innovative Features")
+# --- Innovative Features Section ---
+st.markdown("### Our Innovative Features")
 
-features = [
-    {
-        "title": "Hyper-Realistic Synthetic Humans",
-        "description": "Generate fully customizable, photorealistic 3D humans with diverse ethnicities, body types, ages, and attire. Include micro-expressions and natural movements for high-fidelity simulations."
-    },
-    {
-        "title": "Context-Aware Scenario Generation",
-        "description": "AI can place synthetic humans in complex, real-world environments—like crowded streets, offices, or industrial settings. Dynamic lighting, weather, and perspective adjustments for realistic model training."
-    },
-    {
-        "title": "Intelligent Content Creation",
-        "description": "Generate contextually relevant text, images, or audio for marketing, storytelling, or training purposes with minimal input."
-    },
-    {
-        "title": "Real-Time Interaction",
-        "description": "Seamlessly interact with AI models for Q&A, advice, or scenario simulations, making your experience both informative and immersive."
-    }
-]
+# Columns for feature cards
+col1, col2, col3 = st.columns(3)
 
-cols = st.columns(2)
-for i, feature in enumerate(features):
-    with cols[i % 2]:
-        st.markdown(f"### {feature['title']}")
-        st.write(feature['description'])
-        st.write("---")
+with col1:
+    st.markdown("**Hyper-Realistic Synthetic Humans**")
+    st.write("Generate fully customizable, photorealistic 3D humans with diverse ethnicities, body types, ages, and attire. Includes micro-expressions and natural movements for high-fidelity simulations.")
 
-# ----------------- AI Chat Section -----------------
-st.subheader("Ask VedgenAI anything!")
+with col2:
+    st.markdown("**Context-Aware Scenario Generation**")
+    st.write("Place synthetic humans in complex, real-world environments—like crowded streets, offices, or industrial settings. Dynamic lighting, weather, and perspective adjustments for realism.")
 
+with col3:
+    st.markdown("**Intelligent Automation & Insights**")
+    st.write("AI generates data-driven insights, automates repetitive tasks, and adapts to user preferences for smarter decision-making.")
+
+# --- Research Feature Section ---
+st.markdown("### Research Feature")
+st.write(
+    "VedgenAI can perform advanced research tasks, summarizing large volumes of information, extracting key insights, "
+    "and generating concise reports from data or documents provided by the user. Perfect for learning, business analysis, or academic work."
+)
+
+st.markdown("---")
+
+# --- User Input Section ---
+st.subheader("Ask VedgenAI Anything")
 user_input = st.text_input("Type your question here:")
 
-if user_input:
-    with st.spinner("VedgenAI is thinking..."):
-        try:
-            response = openai.Completion.create(
-                model="text-davinci-003",
-                prompt=user_input,
-                max_tokens=150
-            )
-            answer = response.choices[0].text.strip()
-        except Exception as e:
-            answer = f"Error: {e}"
-
-    st.markdown(f"**VedgenAI says:** {answer}")
-
-# ----------------- Footer -----------------
-st.write("---")
-st.write("Made with ❤️ using Streamlit & OpenAI")
+if st.button("Submit"):
+    if not user_input:
+        st.warning("Please type something!")
+    else:
+        # Show spinner while AI thinks
+        with st.spinner("VedgenAI is researching and generating a response... 🤖"):
+            try:
+                response = openai.Completion.create(
+                    engine="text-davinci-003",
+                    prompt=user_input,
+                    max_tokens=200
+                )
+                sleep(1)  # small delay for UX
+                st.success("Here’s what VedgenAI says:")
+                st.write(response.choices[0].text.strip())
+            except Exception as e:
+                st.error(f"Error: {e}")
