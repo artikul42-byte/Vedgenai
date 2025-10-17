@@ -48,15 +48,4 @@ if st.button("Submit"):
         st.warning("Please type something!")
     else:
         # Show spinner while AI thinks
-        with st.spinner("VedgenAI is researching and generating a response... 🤖"):
-            try:
-                response = openai.Completion.create(
-                    engine="text-davinci-003",
-                    prompt=user_input,
-                    max_tokens=200
-                )
-                sleep(1)  # small delay for UX
-                st.success("Here’s what VedgenAI says:")
-                st.write(response.choices[0].text.strip())
-            except Exception as e:
-                st.error(f"Error: {e}")
+        with st.spinner("VedgenAI is researching
