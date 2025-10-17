@@ -1,65 +1,83 @@
-import streamlit as st
-from openai import OpenAI
+# vedgenai.py
+import subprocess
+import sys
 
-# 🎯 App Title
-st.title("🤖 VedgenAI - The Future of Synthetic Intelligence")
+# -----------------------------
+# Install packages if missing
+# -----------------------------
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-# 🌟 Subtitle
-st.subheader("Innovative Features of VedgenAI")
+try:
+    import streamlit as st
+except ImportError:
+    install("streamlit")
+    import streamlit as st
 
-# 🧠 Features
+try:
+    from openai import OpenAI
+except ImportError:
+    install("openai")
+    from openai import OpenAI
+
+# -----------------------------
+# Initialize OpenAI client
+# -----------------------------
+# Add your OpenAI API key in Streamlit Secrets: OPENAI_API_KEY
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+# -----------------------------
+# App Layout
+# -----------------------------
+st.set_page_config(page_title="VedgenAI", page_icon="🤖")
+st.title("VedgenAI - AI Innovations Showcase")
+
+# Innovative Features Section
+st.header("🌟 Innovative Features of VedgenAI")
 st.markdown("""
-### 1. Hyper-Realistic Synthetic Humans
-Generate fully customizable, photorealistic 3D humans with diverse ethnicities, body types, ages, and attire.  
-Include micro-expressions and natural movements for high-fidelity simulations.
+1. **Hyper-Realistic Synthetic Humans**  
+   Generate fully customizable, photorealistic 3D humans with diverse ethnicities, body types, ages, and attire.
 
-### 2. Context-Aware Scenario Generation
-AI can place synthetic humans in complex, real-world environments—like crowded streets, offices, or industrial settings.  
-Dynamic lighting, weather, and perspective adjustments for realistic model training.
+2. **Context-Aware Scenario Generation**  
+   AI can place synthetic humans in complex, real-world environments like crowded streets, offices, or industrial settings.
 
-### 3. Emotion & Gesture Annotation
-Automatically tag emotions, gestures, and actions in videos, enabling advanced human-computer interaction AI applications.
-
-### 4. Bias Detection & Mitigation Tools
-Built-in analytics that detect underrepresented groups in datasets and automatically balance diversity.  
-Provides reports to improve AI fairness and inclusivity.
-
-### 5. Rapid Dataset Generation
-Create millions of annotated images and videos in hours, significantly reducing AI training time and costs.
-
-### 6. Plug-and-Play API Integration
-Developers can directly integrate VedgenAI’s dataset generation into existing AI pipelines with a simple API.
-
-### 7. Privacy-First Synthetic Data
-Ensures zero exposure of personal data while providing fully realistic datasets for sensitive applications.
-
-### 8. Adaptive Scenario Simulation
-AI can automatically generate rare or edge-case scenarios (e.g., unusual driving conditions, medical anomalies) to improve model robustness.
-
-### 9. AR & VR Ready Data
-Generates datasets optimized for augmented reality and virtual reality applications, enhancing immersive experiences.
-
-### 10. AI-Powered Feedback Loop
-The system evaluates model performance and suggests dataset refinements for continuous improvement.
+3. **Dynamic AI Chat**  
+   Ask questions and get intelligent responses powered by OpenAI models.
 """)
 
-st.divider()
+st.markdown("---")
 
-# 💬 Interactive Section
-st.header("💬 Ask VedgenAI Anything")
+# -----------------------------
+# Initialize chat memory
+# -----------------------------
+if "messages" not in st.session_state:
+    st.session_state.messages = []  # Store conversation history
 
-user_input = st.text_input("Type your question here:")
+# -----------------------------
+# AI Chat Section
+# -----------------------------
+st.header("💬 Chat with VedgenAI")
+user_input = st.text_input("Enter your question here:")
 
 if user_input:
-    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+    # Add user's message to conversation
+    st.session_state.messages.append({"role": "user", "content": user_input})
 
-    with st.spinner("VedgenAI is thinking..."):
-        chat_response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "You are VedgenAI, a futuristic AI that answers questions clearly and intelligently."},
-                {"role": "user", "content": user_input}
-            ]
-        )
+    with st.spinner("VedgenAI is thinking... 🤖"):
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=st.session_state.messages,
+            )
+            answer = response.choices[0].message.content
+            # Add AI response to conversation
+            st.session_state.messages.append({"role": "assistant", "content": answer})
+        except Exception as e:
+            st.error(f"Error: {e}")
 
-    st.success("VedgenAI says: " + chat_response.choices[0].message.content)
+# Display full chat
+for msg in st.session_state.messages:
+    if msg["role"] == "user":
+        st.markdown(f"**You:** {msg['content']}")
+    else:
+        st.markdown(f"**VedgenAI:** {msg['content']}")
