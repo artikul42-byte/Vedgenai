@@ -55,5 +55,5 @@ if user_input:
             st.success(answer)
         
 
-st.markdown("---")
+
 st.markdown("Made with ❤️ by VedgenAI")
