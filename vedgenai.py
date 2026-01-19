@@ -53,8 +53,7 @@ if user_input:
             )
             answer = response.choices[0].message.content
             st.success(answer)
-        except Exception as e:
-            st.error(f"Error: {e}")
+        
 
 st.markdown("---")
 st.markdown("Made with ❤️ by VedgenAI")
