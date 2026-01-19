@@ -1,5 +1,5 @@
 import streamlit as st
-from openai import OpenAI
+
 
 # Page config
 st.set_page_config(page_title="VedgenAI", layout="wide")
