@@ -48,7 +48,7 @@ if user_input:
     with st.spinner("VedgenAI is thinking..."):
         try:
             response = user.chat.completions.create
-                model="gpt-4.1-mini",
+         
                 messages=[{"role": "user", "content": user_input}]
             
             answer = response.choices[0].message.content
