@@ -49,7 +49,7 @@ if user_input:
         try:
             response = user.chat.completions.create
          
-                messages=[{"role": "user", "content": user_input}]
+               
             
             answer = response.choices[0].message.content
             st.success(answer)
