@@ -47,10 +47,10 @@ user_input = st.text_input("Type your question here:")
 if user_input:
     with st.spinner("VedgenAI is thinking..."):
         try:
-            response = client.chat.completions.create(
+            response = user.chat.completions.create
                 model="gpt-4.1-mini",
                 messages=[{"role": "user", "content": user_input}]
-            )
+            
             answer = response.choices[0].message.content
             st.success(answer)
         
