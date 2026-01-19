@@ -1,9 +1,6 @@
 import streamlit as st
 from openai import OpenAI
 
-# Initialize OpenAI client with API key from Streamlit secrets
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-
 # Page config
 st.set_page_config(page_title="VedgenAI", layout="wide")
 
